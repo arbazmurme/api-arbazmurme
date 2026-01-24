@@ -25,9 +25,15 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
 const projectRoutes = require("./routes/projectRoutes");
 const uploadRoute = require("./routes/uploadRoute");
+const skillRoutes = require("./routes/skillRoutes"); 
+const experienceEducationRoutes = require("./routes/experienceEducationRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/upload", uploadRoute); // Changed to versioned endpoint
+app.use("/api/skills", skillRoutes); // ✅ router function
+app.use("/api/v1/experience-education", experienceEducationRoutes);
+app.use("/api/v1/contact", contactRoutes);
 
 // Health check endpoint
 app.get("/api/v1/health", (req, res) => {
@@ -64,5 +70,5 @@ const PORT = process.env.PORT || 3001;
 const NODE_ENV = process.env.NODE_ENV || "development";
 
 app.listen(PORT, () => {
-  console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`);
+  console.log(`Server running in ${NODE_ENV} mode on port http://localhost:${PORT}`);
 });
