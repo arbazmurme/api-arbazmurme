@@ -1,12 +1,13 @@
+const path = require("path");
+const dotenv = require("dotenv");
+
+// Load environment variables before other imports
+dotenv.config({ path: path.join(__dirname, ".env") });
+
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const path = require("path");
 const morgan = require("morgan");
-
-// Load environment variables
-dotenv.config();
 
 // Initialize Express app
 const app = express();
@@ -18,6 +19,7 @@ connectDB();
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 app.use(morgan("dev")); // HTTP request logger
+console.log("MONGO_URI", process.env.MONGO_URI);
 
 // Static files (if you need to serve any)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -25,7 +27,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
 const projectRoutes = require("./routes/projectRoutes");
 const uploadRoute = require("./routes/uploadRoute");
-const skillRoutes = require("./routes/skillRoutes"); 
+const skillRoutes = require("./routes/skillRoutes");
 const experienceEducationRoutes = require("./routes/experienceEducationRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 
