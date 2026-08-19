@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const AdminUser = require("../models/AdminUser");
+
+const JWT_SECRET = process.env.JWT_SECRET || "arbaz_portfolio_secret_key_2026";
 
 exports.protect = async (req, res, next) => {
   let token;
@@ -10,24 +12,20 @@ exports.protect = async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select("-password");
-      next();
+      const decoded = jwt.verify(token, JWT_SECRET);
+      req.user = await AdminUser.findById(decoded.id).select("-password");
+
+      if (!req.user) {
+        return res.status(401).json({ success: false, message: "Not authorized, user not found" });
+      }
+
+      return next();
     } catch (error) {
-      res.status(401).json({ message: "Not authorized, token failed" });
+      return res.status(401).json({ success: false, message: "Not authorized, token invalid or expired" });
     }
   }
 
   if (!token) {
-    res.status(401).json({ message: "Not authorized, no token" });
-  }
-};
-
-// Check if the user is an admin
-exports.isAdmin = (req, res, next) => {
-  if (req.user && req.user.isAdmin) {
-    next();
-  } else {
-    res.status(403).json({ message: "Not authorized as an admin" });
+    return res.status(401).json({ success: false, message: "Not authorized, no token provided" });
   }
 };

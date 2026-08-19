@@ -44,6 +44,7 @@ const skillRoutes = require("./routes/skillRoutes");
 const experienceEducationRoutes = require("./routes/experienceEducationRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/upload", uploadRoute); // Changed to versioned endpoint
@@ -51,6 +52,7 @@ app.use("/api/skills", skillRoutes); // ✅ router function
 app.use("/api/v1/experience-education", experienceEducationRoutes);
 app.use("/api/v1/contact", contactRoutes);
 app.use("/api/v1/job-applications", jobApplicationRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 // Health check endpoint
 app.get("/api/v1/health", (req, res) => {
