@@ -15,6 +15,17 @@ const JobApplicationSchema = new mongoose.Schema(
       required: [true, "Role/Position is required"],
       trim: true,
     },
+    companyEmail: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      default: "",
+    },
+    companyContact: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     platform: {
       type: String,
       trim: true,
