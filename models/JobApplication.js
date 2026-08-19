@@ -53,6 +53,15 @@ const UsefulLinkSchema = new mongoose.Schema({
 // Main Job Application Schema
 const JobApplicationSchema = new mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "AdminUser",
+    },
+    userEmail: {
+      type: String,
+      lowercase: true,
+      trim: true,
+    },
     sNo: {
       type: Number,
     },
