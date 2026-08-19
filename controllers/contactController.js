@@ -1,4 +1,5 @@
 const Contact = require("../models/Contact");
+const { sendContactEmails } = require("../utils/sendEmail");
 
 /* =========================
    CREATE (Public – Contact Form)
@@ -18,6 +19,11 @@ exports.createContact = async (req, res) => {
       name,
       email,
       message,
+    });
+
+    // Send email notifications to Admin and User
+    sendContactEmails({ name, email, message }).catch((err) => {
+      console.error("Background email sending error:", err);
     });
 
     res.status(201).json({

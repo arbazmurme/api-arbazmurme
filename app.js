@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 
 // Load environment variables before other imports
 dotenv.config({ path: path.join(__dirname, ".env") });
+// Premium Email UI templates enabled
 
 const express = require("express");
 const cors = require("cors");
