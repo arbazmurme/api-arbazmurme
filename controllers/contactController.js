@@ -21,10 +21,12 @@ exports.createContact = async (req, res) => {
       message,
     });
 
-    // Send email notifications to Admin and User
-    sendContactEmails({ name, email, message }).catch((err) => {
-      console.error("Background email sending error:", err);
-    });
+    // Send email notifications to Admin and User (Awaited for Vercel Serverless compatibility)
+    try {
+      await sendContactEmails({ name, email, message });
+    } catch (emailErr) {
+      console.error("Email sending error:", emailErr);
+    }
 
     res.status(201).json({
       success: true,
