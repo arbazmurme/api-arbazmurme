@@ -4,8 +4,8 @@ require("dotenv").config();
 const createTransporter = () => {
   const host = process.env.SMTP_HOST || "smtp.gmail.com";
   const port = process.env.SMTP_PORT || 465;
-  const user = process.env.SMTP_MAIL || process.env.EMAIL_USER;
-  const pass = process.env.SMTP_PASSWORD || process.env.EMAIL_PASS;
+  const user = process.env.SMTP_MAIL || process.env.EMAIL_USER || "arbazmurme.work@gmail.com";
+  const pass = process.env.SMTP_PASSWORD || process.env.EMAIL_PASS || "abazxsnayscwxgcq";
 
   if (!user || !pass) {
     console.warn("SMTP credentials missing! SMTP_MAIL:", user);

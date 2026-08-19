@@ -1,15 +1,14 @@
 const mongoose = require("mongoose");
 
+const DEFAULT_MONGO_URI = "mongodb+srv://arbazmurme:arbazmurme@arbazmurme.zup85.mongodb.net/portfolio?appName=arbazmurme";
+
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const mongoURI = process.env.MONGO_URI || DEFAULT_MONGO_URI;
+    const conn = await mongoose.connect(mongoURI);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
+    console.error(`MongoDB connection error: ${error.message}`);
   }
 };
 
