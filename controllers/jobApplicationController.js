@@ -5,21 +5,7 @@ const JobApplication = require("../models/JobApplication");
 ========================= */
 exports.createJobApplication = async (req, res) => {
   try {
-    const {
-      sNo,
-      companyName,
-      rolePosition,
-      companyEmail,
-      companyContact,
-      platform,
-      dateApplied,
-      status,
-      responseFeedback,
-      interviewRoundQuestions,
-      whereIGotStuck,
-      actionItems,
-      usefulLinksNotes,
-    } = req.body;
+    const { companyName, rolePosition, sNo } = req.body;
 
     if (!companyName || !rolePosition) {
       return res.status(400).json({
@@ -36,19 +22,8 @@ exports.createJobApplication = async (req, res) => {
     }
 
     const jobApp = await JobApplication.create({
+      ...req.body,
       sNo: serialNumber,
-      companyName,
-      rolePosition,
-      companyEmail,
-      companyContact,
-      platform,
-      dateApplied: dateApplied || Date.now(),
-      status: status || "Applied",
-      responseFeedback,
-      interviewRoundQuestions,
-      whereIGotStuck,
-      actionItems,
-      usefulLinksNotes,
     });
 
     res.status(201).json({

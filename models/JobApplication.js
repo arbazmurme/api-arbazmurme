@@ -1,5 +1,56 @@
 const mongoose = require("mongoose");
 
+// Company Contact Person Sub-schema
+const ContactPersonSchema = new mongoose.Schema({
+  name: { type: String, trim: true, default: "" },
+  email: { type: String, trim: true, lowercase: true, default: "" },
+  phone: { type: String, trim: true, default: "" },
+  designation: { type: String, trim: true, default: "" },
+});
+
+// Interview Round Sub-schema
+const InterviewRoundSchema = new mongoose.Schema({
+  roundName: { type: String, trim: true, default: "Technical Round" },
+  roundDate: { type: Date },
+  status: {
+    type: String,
+    enum: ["Scheduled", "Passed", "Failed", "Pending", "Cancelled"],
+    default: "Pending",
+  },
+  interviewerName: { type: String, trim: true, default: "" },
+  questions: [{ type: String, trim: true }],
+  whereIGotStuck: { type: String, trim: true, default: "" },
+  feedback: { type: String, trim: true, default: "" },
+});
+
+// Response / Feedback History Sub-schema
+const ResponseFeedbackSchema = new mongoose.Schema({
+  date: { type: Date, default: Date.now },
+  responseType: { type: String, trim: true, default: "Email" },
+  status: { type: String, trim: true, default: "" },
+  notes: { type: String, trim: true, default: "" },
+});
+
+// Where I Got Stuck Sub-schema
+const GotStuckItemSchema = new mongoose.Schema({
+  topic: { type: String, trim: true, default: "" },
+  description: { type: String, trim: true, default: "" },
+});
+
+// Action Items Sub-schema
+const ActionItemSchema = new mongoose.Schema({
+  task: { type: String, trim: true, required: true },
+  isCompleted: { type: Boolean, default: false },
+});
+
+// Useful Links Sub-schema
+const UsefulLinkSchema = new mongoose.Schema({
+  title: { type: String, trim: true, default: "" },
+  url: { type: String, trim: true, default: "" },
+  note: { type: String, trim: true, default: "" },
+});
+
+// Main Job Application Schema
 const JobApplicationSchema = new mongoose.Schema(
   {
     sNo: {
@@ -15,13 +66,12 @@ const JobApplicationSchema = new mongoose.Schema(
       required: [true, "Role/Position is required"],
       trim: true,
     },
-    companyEmail: {
+    jobLocation: {
       type: String,
       trim: true,
-      lowercase: true,
-      default: "",
+      default: "Remote",
     },
-    companyContact: {
+    salaryPackage: {
       type: String,
       trim: true,
       default: "",
@@ -49,31 +99,14 @@ const JobApplicationSchema = new mongoose.Schema(
       default: "Applied",
       trim: true,
     },
-    responseFeedback: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-    interviewRoundQuestions: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-    whereIGotStuck: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-    actionItems: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-    usefulLinksNotes: {
-      type: String,
-      trim: true,
-      default: "",
-    },
+
+    // Array fields for multiple items per application
+    companyContacts: [ContactPersonSchema],
+    interviewRounds: [InterviewRoundSchema],
+    responseFeedback: [ResponseFeedbackSchema],
+    whereIGotStuck: [GotStuckItemSchema],
+    actionItems: [ActionItemSchema],
+    usefulLinksNotes: [UsefulLinkSchema],
   },
   {
     timestamps: true, // createdAt, updatedAt
