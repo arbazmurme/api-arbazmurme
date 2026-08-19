@@ -17,7 +17,19 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors({ origin: '*', credentials: true }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+      return callback(null, origin);
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  })
+);
+app.options("*", cors());
 app.use(express.json());
 app.use(morgan("dev")); // HTTP request logger
 console.log("MONGO_URI", process.env.MONGO_URI);
