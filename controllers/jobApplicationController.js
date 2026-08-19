@@ -1,5 +1,48 @@
 const JobApplication = require("../models/JobApplication");
 
+// Helper to filter out empty draft objects from arrays
+const sanitizeApplicationData = (data) => {
+  const cleanData = { ...data };
+
+  if (Array.isArray(cleanData.companyContacts)) {
+    cleanData.companyContacts = cleanData.companyContacts.filter(
+      (c) => (c.name && c.name.trim()) || (c.email && c.email.trim()) || (c.phone && c.phone.trim()) || (c.designation && c.designation.trim())
+    );
+  }
+
+  if (Array.isArray(cleanData.interviewRounds)) {
+    cleanData.interviewRounds = cleanData.interviewRounds.filter(
+      (r) => (r.roundName && r.roundName.trim()) || (r.interviewerName && r.interviewerName.trim()) || (r.feedback && r.feedback.trim()) || (r.whereIGotStuck && r.whereIGotStuck.trim()) || (r.questions && r.questions.some((q) => q && q.trim()))
+    );
+  }
+
+  if (Array.isArray(cleanData.responseFeedback)) {
+    cleanData.responseFeedback = cleanData.responseFeedback.filter(
+      (f) => (f.status && f.status.trim()) || (f.notes && f.notes.trim())
+    );
+  }
+
+  if (Array.isArray(cleanData.whereIGotStuck)) {
+    cleanData.whereIGotStuck = cleanData.whereIGotStuck.filter(
+      (s) => (s.topic && s.topic.trim()) || (s.description && s.description.trim())
+    );
+  }
+
+  if (Array.isArray(cleanData.actionItems)) {
+    cleanData.actionItems = cleanData.actionItems.filter(
+      (a) => a.task && a.task.trim() !== ""
+    );
+  }
+
+  if (Array.isArray(cleanData.usefulLinksNotes)) {
+    cleanData.usefulLinksNotes = cleanData.usefulLinksNotes.filter(
+      (l) => (l.title && l.title.trim()) || (l.url && l.url.trim()) || (l.note && l.note.trim())
+    );
+  }
+
+  return cleanData;
+};
+
 /* =========================
    CREATE Job Application
 ========================= */
@@ -21,8 +64,10 @@ exports.createJobApplication = async (req, res) => {
       serialNumber = count + 1;
     }
 
+    const cleanData = sanitizeApplicationData(req.body);
+
     const jobApp = await JobApplication.create({
-      ...req.body,
+      ...cleanData,
       sNo: serialNumber,
     });
 
@@ -90,9 +135,11 @@ exports.getSingleJobApplication = async (req, res) => {
 ========================= */
 exports.updateJobApplication = async (req, res) => {
   try {
+    const cleanData = sanitizeApplicationData(req.body);
+
     const jobApp = await JobApplication.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      cleanData,
       { new: true, runValidators: true }
     );
 

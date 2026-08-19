@@ -39,7 +39,7 @@ const GotStuckItemSchema = new mongoose.Schema({
 
 // Action Items Sub-schema
 const ActionItemSchema = new mongoose.Schema({
-  task: { type: String, trim: true, required: true },
+  task: { type: String, trim: true, default: "" },
   isCompleted: { type: Boolean, default: false },
 });
 
